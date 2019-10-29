@@ -1,0 +1,759 @@
+openapi: 3.0.0
+info:
+  title: GoldHook
+  version: '1.0'
+  contact:
+    name: Doug Castell
+    url: 'https://www.castellcomputers.com/?page_id=7'
+    email: doug@castellcomputers.com
+  termsOfService: 'https://www.castellcomputers.com'
+  license:
+    name: Commercial
+    url: 'https://www.castellcomputers.com/?page_id=374'
+  description: Web API for use with GoldMine Premium Edition
+servers:
+  - url: 'https://yourserver.com'
+    description: GoldHook
+paths:
+  /Contact:
+    get:
+      summary: GetContact
+      tags: []
+      description: Retrieve a single field value from a primary contact record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: Recid
+          description: the contact1.recid of the contact record to be queried
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Field
+          description: 'contact1/contact2/"special" field to be retrieved from the matched contact'
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            examples:
+              Get the primary e-mail address:
+                value:
+                  recid: 'LKIX6C9%#GH*,=H'
+                  field: email
+              Get the Accountno of the contact record:
+                value:
+                  recid: 'LKIX6C9%#GH*,=H'
+                  field: accountno
+        description: 'Retrieve the value of a single field from contact1/contact2 or special (ie. "email", "website")'
+    post:
+      summary: PostContact
+      tags: []
+      responses: {}
+      description: Create a primary Contact record
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Create a basic contact:
+                value:
+                  DEAR: Mrs
+                  CONTACT: Jennifer Taylor
+                  COMPANY: 'Test Co, INC'
+                  LASTNAME: Taylor
+                  USERID: DOUG
+                  PHONE1: '3105551212'
+                  Userdef01: test123
+                  email: jt@testertestymctest.com
+        description: 'Contact1/Contact2 fields and any special value(s) (ie. "email", "website", "nonusaphone", etc. per GoldMine API documentation)'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: Contact
+          description: Contact Name (contact1.contact)
+        - schema:
+            type: string
+          in: query
+          name: Company
+          description: Company name (contact.company)
+        - schema:
+            type: string
+          in: query
+          name: Phone1
+          description: Primary phone number (contact1.phone1)
+        - schema:
+            type: string
+          in: query
+          name: City
+          description: Primary City (contact1.city)
+        - schema:
+            type: string
+          in: query
+          name: State
+          description: Primary state (contact1.state)
+        - schema:
+            type: string
+          in: query
+          name: Email
+          description: "'Special' field that creates the primary contact's primary e-mail address."
+        - schema:
+            type: string
+          in: query
+          name: ...Other contact1/contact2 fields
+          description: Other fields contained in the contact1 and contact2 tables
+    put:
+      summary: PutContact
+      tags: []
+      responses:
+        '200':
+          description: OK
+      description: Update a one or more fields of a primary company/contact record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: Recid
+          description: the contact1.recid of the contact record to be updated
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Contact
+          description: Contact name (contact1.contact)
+        - schema:
+            type: string
+          in: query
+          name: Company
+          description: Company name (contact1.company)
+        - schema:
+            type: string
+          in: query
+          name: Email
+          description: Email address
+        - schema:
+            type: string
+          in: query
+          name: Phone1
+          description: Phone1 of the primary contact (contact1.phone1)
+        - schema:
+            type: string
+          in: query
+          name: Userdef01
+          description: userdef01 (contact2.userdef01) and/or any other contact2 fields
+        - schema:
+            type: string
+          in: query
+          name: PrimaryEmail
+          description: "If adding an e-mail address, include this 'field' with a value of 1 to mark the new address as the primary e-mail address."
+      requestBody:
+        description: Name/Value pair(s) of fields to be updated
+        content:
+          application/json:
+            schema:
+              type: object
+            examples:
+              'Updating the dear field:':
+                value:
+                  recid: 'LKEGUKS*UU<B,=H'
+                  DEAR: Mr
+              Updating Multiple fields:
+                value:
+                  recid: 'LKEGUKS*UU<B,=H'
+                  State: CA
+                  City: Beverly Hills
+                  Key1: Customer
+                  Userdef10: High
+                  Email: dougtest@testsite123.com
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+    parameters: []
+  /AdditionalContact:
+    get:
+      summary: GetAdditionalContact
+      tags: []
+      description: Retrieve a single field value from an additional contact record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: Recid
+          description: the contsupp.recid of the contact record to be queried
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Field
+          description: contsupp field (or email) to be retrieved from the matched contact
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Get the e-mail address:
+                value:
+                  recid: 'LKIX6C9%#GH*,=H'
+                  field: email
+              Get the Accountno this additional contact record belongs to:
+                value:
+                  recid: 'LKIX6C9%#GH*,=H'
+                  field: accountno
+        description: 'Retrieve the value of a single field from contsupp or special (ie. "email")'
+    post:
+      summary: PostAdditionalContact
+      tags: []
+      responses: {}
+      description: Create an additional Contact record
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Create a basic additional contact:
+                value:
+                  ACCOUNTNO: 'A3030269591$6UW!HPDA'
+                  CONTACT: JohnTaylor
+                  USERID: DOUG
+                  PHONE1: '3105551213'
+                  email: jjoht@testertestymctest.com
+        description: 'Contsupp fields and any special value(s) (ie. "email" per GoldMine API documentation)'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          required: true
+          description: Unique identifier of the contact to which to link this item (contact1.accountno)
+        - schema:
+            type: string
+          in: query
+          name: Contact
+          description: Contact Name (contsupp.contact)
+        - schema:
+            type: string
+          in: query
+          name: Phone
+          description: Primary phone number (contsupp.phone)
+        - schema:
+            type: string
+          in: query
+          name: City
+          description: City (contsupp.city)
+        - schema:
+            type: string
+          in: query
+          name: State
+          description: state (contsupp.state)
+        - schema:
+            type: string
+          in: query
+          name: Email
+          description: "'Special' field that creates the additional contact's e-mail address."
+        - schema:
+            type: string
+          in: query
+          name: ...Other fields
+          description: |
+            other contsupp fields associated with the additional contact record
+    put:
+      summary: PutAdditionalContact
+      tags: []
+      responses:
+        '200':
+          description: OK
+      description: Update a one or more fields of an additional contact record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: Recid
+          description: the contsupp.recid of the contact record to be updated
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Contact
+          description: Contact name (contsupp.contact)
+        - schema:
+            type: string
+          in: query
+          name: Email
+          description: Email address
+        - schema:
+            type: string
+          in: query
+          name: Phone
+          description: 'Phone # of the primary contact (contsupp.phone1)'
+      requestBody:
+        description: Name/Value pair(s) of fields to be updated
+        content:
+          application/json:
+            schema:
+              type: object
+            examples:
+              'Updating the dear field:':
+                value:
+                  recid: 'LKEGUKS*UU<B,=H'
+                  DEAR: Mr
+              Updating Multiple fields:
+                value:
+                  recid: 'LKEGUKS*UU<B,=H'
+                  State: CA
+                  City: Beverly Hills
+                  Email: dougtest@testsite123.com
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+    parameters: []
+  /Schedule:
+    get:
+      summary: GetSchedule
+      tags: []
+      responses: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the cal.recid of the history record to be queried
+        - schema:
+            type: string
+          in: query
+          name: field
+          required: true
+          description: cal field to be retrieved from the matched contact
+      description: Retrieve a single field value from a scheduled activity
+    post:
+      summary: PostSchedule
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          description: Unique identifier of the contact to which to link this item contact1.accountno
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: ref
+          description: reference of the activity (cal.ref)
+        - schema:
+            type: string
+          in: query
+          name: ondate
+          description: date of the activity (cal.ondate)
+        - schema:
+            type: string
+          in: query
+          name: ontime
+          description: time of the activity (cal.ontime)
+        - schema:
+            type: string
+          in: query
+          name: userid
+          description: Schdeuled user of the activity (cal.userid)
+        - schema:
+            type: string
+          in: query
+          name: rectype
+          description: |-
+            Type of activity (cal.rectype)
+
+            Valid Values:
+            A Appointment
+            F Literature fulfillment
+            S Sales potential
+            C Call Back
+            M Message
+            T Next action
+            D To-do
+            O Other
+            E Event
+            Q Queued e-mail
+      description: Create a scheduled activity
+    put:
+      summary: PutSchedule
+      description: Update a one or more fields of a scheduled activity
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the cal.recid of the contact record to be updated
+        - schema:
+            type: string
+          in: query
+          name: ondate
+        - schema:
+            type: string
+          in: query
+          name: ref
+        - schema:
+            type: string
+          in: query
+          name: ontime
+        - schema:
+            type: string
+          in: query
+          name: userid
+  /History:
+    get:
+      summary: GetHistory
+      tags: []
+      responses: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the conthist.recid of the history record to be queried
+        - schema:
+            type: string
+          in: query
+          name: field
+          required: true
+          description: conthist field to be retrieved from the matched contact
+      description: Retrieve a single field value from a history record
+    post:
+      summary: PostHistory
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          description: Unique identifier of the contact to which to link this item (contact1.accountno)
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: ref
+          description: Reference of the activity (conthist.ref)
+        - schema:
+            type: string
+          in: query
+          name: ondate
+          description: Date of the activity (conthist.ondate)
+        - schema:
+            type: string
+          in: query
+          name: ontime
+          description: Time of the activity (conthist.ontime)
+        - schema:
+            type: string
+          in: query
+          name: userid
+          description: Activity user (conthist.userid)
+        - schema:
+            type: string
+          in: query
+          name: notes
+          description: notes of the activity (conthist.notes)
+        - schema:
+            type: string
+          in: query
+          name: rectype
+          description: "Record type of the activity (conthist.srectype & conthist.rectype) \nValid values:\nA Appointment\nM Sent message\nCI Incoming call\nC Phone call\nO Other\nCM Returned message\nD To-do\nS Sale\nCO Outgoing call\nE Event\nT Next action\nMG E-mail message\nF Literature fulfillment\nU Unknown MI Received e-mail\nL Form\nCC Call back\nMO Sent e-mail"
+      description: Create a history record
+    put:
+      summary: PutHistory
+      description: Update a one or more fields of a history record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the conthist.recid of the contact record to be updated
+        - schema:
+            type: string
+          in: query
+          name: ondate
+        - schema:
+            type: string
+          in: query
+          name: ref
+        - schema:
+            type: string
+          in: query
+          name: ontime
+        - schema:
+            type: string
+          in: query
+          name: userid
+  /Detail:
+    get:
+      summary: GetDetail
+      tags: []
+      responses: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: contsupp.recid of the detail record to be queried
+        - schema:
+            type: string
+          in: query
+          name: field
+          required: true
+          description: contsupp field to be retrieved from the matched detail
+      description: Retrieve a single field value from a Detail record
+    post:
+      summary: PostDetail
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          description: Unique identifier of the contact to which to link this item (contact1.accountno)
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: detail
+          description: The name of the detail (contsupp.contact)
+        - schema:
+            type: string
+          in: query
+          name: ref
+          description: value of the detail (contsupp.contsupref)
+        - schema:
+            type: string
+          in: query
+          name: ufield1
+          description: contsupp.title
+        - schema:
+            type: string
+          in: query
+          name: ufield2
+          description: contsupp.linkacct
+        - schema:
+            type: string
+          in: query
+          name: ufield3
+          description: contsupp.country
+        - schema:
+            type: string
+          in: query
+          name: ufield4
+          description: contsupp.dear
+        - schema:
+            type: string
+          in: query
+          name: ufield5
+          description: contsupp.fax
+        - schema:
+            type: string
+          in: query
+          name: ufield6
+          description: contsupp.zip
+        - schema:
+            type: string
+          in: query
+          name: ufield7
+          description: contsupp.ext
+        - schema:
+            type: string
+          in: query
+          name: ufield8
+          description: contsupp.state
+        - schema:
+            type: string
+          in: query
+          name: ufield9
+          description: contsupp.mergecodes
+        - schema:
+            type: string
+          in: query
+          name: ufield10
+          description: contsupp.address1
+        - schema:
+            type: string
+          in: query
+          name: ufield11
+          description: contsupp.address2
+        - schema:
+            type: string
+          in: query
+          name: ufield12
+          description: contsupp.address3
+        - schema:
+            type: string
+          in: query
+          name: notes
+          description: notes field
+      description: Create a detail record
+    put:
+      summary: PutDetail
+      description: Update a one or more fields of a detail record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the contsupp.recid of the detail record to be updated
+        - schema:
+            type: string
+          in: query
+          name: ref
+          description: reference of the detail (contsupp.contsupref)
+        - schema:
+            type: string
+          in: query
+          name: ufield1-12
+          description: detail fields from the info tab in detail properties
+        - schema:
+            type: string
+          in: query
+          name: detail
+          description: Name of the detail (contsupp.contact)
+        - schema:
+            type: string
+          in: query
+  /AP:
+    post:
+      summary: PostAP
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          required: true
+          description: Unique identifier of the contact to which to link this item (contact1.accountno)
+        - schema:
+            type: string
+          in: query
+          name: track
+          required: true
+          description: tracks.tracno value of the track to be attached
+        - schema:
+            type: string
+          in: query
+          name: userid
+          required: true
+          description: the attaching user
+      description: "Attach an automated process to a contact.\n\nTracno is a value that can be located in the tracs table with a query somethine like this: \nselect tracks.tracno from tracks where rectype='B' and name='Your Track name'"
+    parameters: []
+  /Match:
+    get:
+      summary: Match
+      tags: []
+      responses: {}
+      description: |-
+        Check GoldMine to see if the passed value (ie. E-mail address) exists in GoldMine already and, if so, what the accountno of the matching record is.
+        Match vaule can be partial (first x-characters of the string (ie. "Doug@castellco" will return the first contact in the database whose e-mail address begins with that value.))
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: MatchType
+          required: true
+          description: |-
+            What type of data the passed value is
+
+            Walid match types are:
+            Email
+            Phone
+        - schema:
+            type: string
+          in: query
+          name: MatchValue
+          description: Value to be searched in GoldMine
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Phone Match:
+                value:
+                  MatchType: phone
+                  MatchValue: (310)601-4738
+              EmailMatch:
+                value:
+                  MatchType: email
+                  MatchValue: doug@castellcomputers.com
+  /ContactNote:
+    get:
+      summary: GetDetail
+      tags: []
+      responses: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: notes.recid of the history record to be queried
+        - schema:
+            type: string
+          in: query
+          name: field
+          required: true
+          description: notes field to be retrieved from the matched note
+      description: "Retrieve a single field value from a Primary Contact's Note record"
+    post:
+      summary: PostContactNote
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: accountno
+          description: Unique identifier of the contact to which to link this item (contact1.accountno)
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Notes
+          description: |
+            The text of the note
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: Userid
+          description: The GoldMine user to whom to attribute the note
+      description: Create a primary contact note record
+    put:
+      summary: PutDetail
+      description: Update a one or more fields of a note record
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: recid
+          required: true
+          description: the notes.recid of the note record to be updated
+        - schema:
+            type: string
+          in: query
+          name: notes
+          description: The text of the note
+        - schema:
+            type: string
+          in: query
+          name: userid
+          description: The GoldMine user to whom to attribute the note
+components:
+  schemas: {}
+  securitySchemes: {}
